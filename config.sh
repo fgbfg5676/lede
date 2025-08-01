@@ -1,4 +1,32 @@
-# 自定义 DTS 补丁函数（适配 opboot + NAND Flash）
+#!/bin/bash
+
+# ========================================================
+# OpenWrt 自定义配置脚本 for Mobipromo CM520-79F
+# 适配 opboot + NAND Flash 启动
+# 2025年8月1日 - Qwen 整理
+# ========================================================
+
+# === 源码配置 ===
+REPO_URL="https://github.com/coolsnowwolf/lede"
+REPO_BRANCH="master"
+
+# === 编译配置 ===
+CONFIG_FILE="config.cm520"
+IMG_SUFFIX="openwrt-cm520-79f-opboot"
+LAN_IP="192.168.10.1"
+TZ="Asia/Shanghai"
+ENABLE_IPV6=1
+ENABLE_USB=1
+
+# === 修复 GitHub Actions v4 兼容性问题 ===
+# 避免使用已弃用的 upload-artifact@v2
+# 请确保 .github/workflows/openwrt-ci.yml 中使用 @v4
+
+# === 禁用可能导致失败的 Docker 命令 ===
+# 如果你不使用 Docker 构建，请勿清理镜像
+# DOCKER_IMAGE_NAME="your-image"  # 如需使用，请取消注释并设置
+
+# === DTS 补丁函数（适配 opboot + NAND Flash）===
 PATCH_DTS() {
     local dts_path="target/linux/ipq40xx/files/arch/arm/boot/dts/qcom-ipq4019-cm520-79f.dts"
 
@@ -58,3 +86,5 @@ EOF
     echo "✅ DTS 补丁已成功应用到 $dts_path"
     echo "💡 提示：已适配 opboot + NAND Flash 启动"
 }
+
+# === 脚本结束 ===
