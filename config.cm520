@@ -1,22 +1,14 @@
-# config.cm520
-# OpenWrt 配置文件：适用于 Mobipromo CM520-79F + opboot
-# 用于 coolsnowwolf/lede 或 OpenWrt trunk
+# config.cm520 - Mobipromo CM520-79F for opboot + NAND
 
 CONFIG_TARGET_ipq40xx=y
 CONFIG_TARGET_ipq40xx_generic=y
 CONFIG_TARGET_ipq40xx_generic_DEVICE_mobipromo_cm520-79f=y
 
-# 基础功能
+# 基础系统
 CONFIG_PACKAGE_luci=y
-CONFIG_PACKAGE_luci-app-opkg=y
 CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
-CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
-
-# 网络支持
-CONFIG_PACKAGE_kmod-usb-core=y
-CONFIG_PACKAGE_kmod-usb2=y
-CONFIG_PACKAGE_kmod-mt76x2u=y
-CONFIG_PACKAGE_kmod-ath10k-ct=y
+CONFIG_PACKAGE_firewall=y
+CONFIG_PACKAGE_firewall4=y
 
 # 文件系统支持
 CONFIG_PACKAGE_kmod-fs-ext4=y
@@ -24,32 +16,31 @@ CONFIG_PACKAGE_kmod-fs-vfat=y
 CONFIG_PACKAGE_kmod-nls-cp437=y
 CONFIG_PACKAGE_kmod-nls-iso8859-1=y
 
-# 无线 & 网络
-CONFIG_PACKAGE_wireless-tools=y
-CONFIG_PACKAGE_iwinfo=y
+# 无线驱动
+CONFIG_PACKAGE_kmod-ath10k-ct=y
+CONFIG_PACKAGE_kmod-mt76x2u=y
+
+# 网络工具
 CONFIG_PACKAGE_iw=y
-
-# IPv6 支持（可选）
-CONFIG_PACKAGE_kmod-ipv6=y
-CONFIG_PACKAGE_ip6tables=y
-
-# 开发调试
-CONFIG_PACKAGE_bash=y
-CONFIG_PACKAGE_screen=y
-CONFIG_PACKAGE_htop=y
-CONFIG_PACKAGE_nano=y
-
-# 防火墙
-CONFIG_PACKAGE_firewall=y
-CONFIG_PACKAGE_firewall4=y
-
-# 其他常用工具
-CONFIG_PACKAGE_curl=y
+CONFIG_PACKAGE_iwinfo=y
 CONFIG_PACKAGE_wget=y
-CONFIG_PACKAGE_tar=y
-CONFIG_PACKAGE_zip=y
-CONFIG_PACKAGE_unzip=y
 
-# 固件生成格式
+# ========== ✅ 在这里添加你提到的 UBI/UBIFS 支持 ==========
+CONFIG_MTD_UBI=y
+CONFIG_MTD_UBI_BLOCK=y
+CONFIG_MTD_UBI_FASTMAP=y
+CONFIG_FSUBIFS=y
+CONFIG_PACKAGE_kmod-ubi=y
+CONFIG_PACKAGE_kmod-ubifs=y
+CONFIG_PACKAGE_kmod-mtd-rw=y
+# ====================================================
+
+# 固件输出格式（关键！）
+CONFIG_TARGET_ROOTFS_UBIFS=y
+CONFIG_TARGET_ROOTFS_UBI=y
+CONFIG_TARGET_IMAGES_PAD=y
+CONFIG_TARGET_KERNEL_PARTSIZE=16
+CONFIG_TARGET_ROOTFS_PARTSIZE=128
+
+# 压缩格式
 CONFIG_TARGET_IMAGES_GZIP=y
-CONFIG_TARGET_ROOTFS_SQUASHFS=y
