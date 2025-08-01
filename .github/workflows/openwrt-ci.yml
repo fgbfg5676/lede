@@ -2,7 +2,7 @@ name: OpenWrt-CI
 
 on:
   push:
-    branches: 
+    branches:
       - master
 
 jobs:
@@ -37,21 +37,16 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: Generate configuration
+      - name: Copy config
         run: |
           cp $GITHUB_WORKSPACE/config.cm520 .config
           make defconfig
 
       - name: Apply DTS Patch
         run: |
-          bash $GITHUB_WORKSPACE/config.sh && PATCH_DTS
+          source "$GITHUB_WORKSPACE/config.sh"
+          PATCH_DTS
 
       - name: Compile firmware
         run: |
-          make -j$(nproc) || make -j1 V=s
-
-      - name: Upload firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: OpenWrt_firmware
-          path: ./bin/targets/
+          make -j$(nproc)
